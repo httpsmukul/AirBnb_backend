@@ -6,4 +6,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+    @Override
+    public String aboutCustomer() {
+        return "yes its customer";
+    }
 }
