@@ -35,4 +35,18 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "status")
+    private int status;
+
+    @Column(name = "journeyStatus")
+    private int journeyStatus;
+
+    @Column(name = "phoneCode")
+    private int phoneCode;
+
+    @Column(name = "country")
+    private int country;
+
+
+
 }
