@@ -1,4 +1,4 @@
-package com.air.demo.user.masterData;
+package com.air.demo.masterData.entites;
 
 import lombok.Data;
 
@@ -13,17 +13,14 @@ public class MasterCountry {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column (name = "title")
-    private String title;
-
-    @Column(name = "phone_code")
-    private int phoneCode;
-
-    @Column(name = "country_code")
-    private String countryCode;
-
     @Column(name = "status")
     private int status;
+
+    @Column(name = "phone_code")
+    private String phoneCode;
+
+    @Column(name = "country")
+    private String country;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

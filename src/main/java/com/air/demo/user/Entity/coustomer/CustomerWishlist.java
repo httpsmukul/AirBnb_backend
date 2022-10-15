@@ -1,6 +1,6 @@
 package com.air.demo.user.Entity.coustomer;
 
-import com.air.demo.user.User;
+import com.air.demo.hotels.entites.Hotels;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,25 +8,25 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class Customer {
-
+public class CustomerWishlist {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "hotel_id")
+    private Hotels hotels;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @Column(name = "loyalty_points")
-    private Integer loyaltyPoints;
 
     @Column(name = "status")
     private int status;

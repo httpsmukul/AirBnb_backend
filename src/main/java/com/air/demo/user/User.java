@@ -1,5 +1,8 @@
 package com.air.demo.user;
+import com.air.demo.masterData.entites.MasterCountry;
 import lombok.Data;
+import org.springframework.cglib.core.Block;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -16,6 +19,13 @@ public class User {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "gender")
+    private int gender;
+    // 1 = male
+    // 2 = female
+    // 3 = other
+    // 0 = need to provide
 
     @Column(name = "dob")
     private String dob;
@@ -37,15 +47,30 @@ public class User {
 
     @Column(name = "status")
     private int status;
+    //inactive = 0
+    //active   = 1
+    //deleted  = 2
 
-    @Column(name = "journeyStatus")
+    @Column(name = "journey_status")
     private int journeyStatus;
+    //
 
-    @Column(name = "phoneCode")
-    private int phoneCode;
+    @ManyToOne
+    @JoinColumn(name = "phone_code_id")
+    private MasterCountry phoneCode;
 
-    @Column(name = "country")
-    private int country;
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private MasterCountry country;
+
+
+    @Column(name = "is_email_validated")
+    private Boolean isEmailValidated;
+
+    @Column(name = "is_phone_validated")
+    private Boolean isPhoneValidated;
+
+
 
 
 
