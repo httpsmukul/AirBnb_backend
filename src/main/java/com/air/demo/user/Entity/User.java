@@ -1,4 +1,4 @@
-package com.air.demo.user;
+package com.air.demo.user.Entity;
 import com.air.demo.masterData.entites.MasterCountry;
 import lombok.Data;
 import org.springframework.cglib.core.Block;
@@ -39,6 +39,13 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @ManyToOne
+    @JoinColumn(name = "phone_code_id")
+    private MasterCountry phoneCode;
+
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -55,9 +62,7 @@ public class User {
     private int journeyStatus;
     //
 
-    @ManyToOne
-    @JoinColumn(name = "phone_code_id")
-    private MasterCountry phoneCode;
+
 
     @ManyToOne
     @JoinColumn(name = "country_id")
@@ -69,6 +74,8 @@ public class User {
 
     @Column(name = "is_phone_validated")
     private Boolean isPhoneValidated;
+
+
 
 
 

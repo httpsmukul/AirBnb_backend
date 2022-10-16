@@ -1,6 +1,6 @@
 package com.air.demo.user.repository;
 
-import com.air.demo.user.User;
+import com.air.demo.user.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
