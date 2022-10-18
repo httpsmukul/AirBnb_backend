@@ -1,4 +1,4 @@
-package com.air.demo.utilityDto;
+package com.air.demo.utilityDto.responseDto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,10 +9,10 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper=false)
 public class ResponseDto {
 
-    private boolean status;
+    boolean status;
 
-    private Objects data;
+    Object data;
 
-    private String message;
+    String message;
 
 }

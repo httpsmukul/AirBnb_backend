@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Entity
 
 public class Gust {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -32,7 +33,8 @@ public class Gust {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "phone_code_id")
+    @ManyToOne
+    @JoinColumn(name = "phone_code_id")
     private MasterCountry phoneCodeId;
 
     @ManyToOne
@@ -41,13 +43,6 @@ public class Gust {
 
     @Column(name = "address")
     private String address;
-
-
-
-
-
-
-
 
 
 }

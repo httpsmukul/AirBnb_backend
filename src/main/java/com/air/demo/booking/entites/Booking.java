@@ -4,6 +4,7 @@ import com.air.demo.hotels.entites.Hotels;
 import com.air.demo.masterData.entites.MasterCountry;
 import com.air.demo.user.Entity.User;
 import com.air.demo.user.Entity.coustomer.Customer;
+import com.air.demo.user.Entity.coustomer.Gust;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,6 +29,11 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "customer_profile_id")
     private Customer customerProfileId;
+
+    @ManyToOne
+    @JoinColumn(name = "gust_id")
+    private Gust gustProfileId;
+
 
 
 
