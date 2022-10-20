@@ -1,4 +1,4 @@
-package com.air.demo.commonUtils.uttils;
+package com.air.demo.uttils;
 
 import org.hibernate.annotations.Comment;
 import org.springframework.context.annotation.Bean;

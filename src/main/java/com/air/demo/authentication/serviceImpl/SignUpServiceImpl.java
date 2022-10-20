@@ -3,13 +3,17 @@ package com.air.demo.authentication.serviceImpl;
 
 import com.air.demo.authentication.entites.OtpLog;
 import com.air.demo.authentication.service.SignUpService;
-import com.air.demo.commonUtils.uttils.CommonUtils;
+import com.air.demo.uttils.CommonUtils;
 import com.air.demo.utilityDto.requestDto.SendOtpReqDto;
 import com.air.demo.utilityDto.requestDto.SignUpReqDto;
 import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
 import com.air.demo.utilityDto.responseDto.ResponseDto;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class SignUpServiceImpl implements SignUpService {
@@ -30,7 +34,6 @@ public class SignUpServiceImpl implements SignUpService {
         }
 
         System.out.println("34+++++++++++line"+otpViaValueType);
-//        if()
 
 
         OtpLog otpLog = new OtpLog();
@@ -39,13 +42,10 @@ public class SignUpServiceImpl implements SignUpService {
             otpLog.setRole(sendOtp.getRoleId());
         }else{
             System.out.println("check your roleId");
+            Map<String, String> map = new HashMap<>();
+            map.put("subProductId", "invalidValue");
+            throw new ServiceException("hgey");
         }
-
-
-
-
-
-
 
 
         ResponseDto responseDto = new ResponseDto();
