@@ -1,7 +1,5 @@
 package com.air.demo.uttils;
 
-import org.hibernate.annotations.Comment;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
@@ -42,6 +40,17 @@ public class CommonUtils {
         // Returning boolean value
         return (m.matches());
     }
+
+        public int getOtp() {
+            int min = 1;
+            int max = 10000;
+            //Generate random int value from 50 to 100
+//            System.out.println("Random value in int from "+min+" to "+max+ ":");
+            //            System.out.println(random_int);
+            return (int)Math.floor(Math.random()*(max-min+1)+min);
+        }
+
+
 
 
 }

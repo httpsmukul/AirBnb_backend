@@ -6,6 +6,7 @@ import com.air.demo.utilityDto.requestDto.SendOtpReqDto;
 import com.air.demo.utilityDto.requestDto.SignUpReqDto;
 import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
 import com.air.demo.utilityDto.responseDto.ResponseDto;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,9 @@ public class SignUpController {
 
 
     @PostMapping("/sendOtp")
+    @ApiOperation(notes = "<b>signUp</b></br> </br>"
+            + "role: 1 = SuperAdmin, 2 = Admin, 3 = host, 4 = customer </br>", value = "sendOtp"
+    )
     public ResponseDto sendOtp(@RequestBody SendOtpReqDto signUpReq){
 
         return signUpService.sendOtp(signUpReq);

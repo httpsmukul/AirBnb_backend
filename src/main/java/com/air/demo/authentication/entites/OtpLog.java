@@ -17,37 +17,37 @@ public class OtpLog {
     private Long id;
 
     @Column(name="otp_via_value",columnDefinition=" VARCHAR(255) ")
-    String 	otpViaValue;
+    private String 	otpViaValue;
     // 1 = phone, 2 = email'
 
     @Column(name="otp_via",columnDefinition="INT4 NOT NULL")
-    int otpVia;
+    private int otpVia;
 
     @Column(name="otp",columnDefinition=" VARCHAR(255)  NOT NULL ")
-    String otp;
+    private String otp;
 
     @Column(name="otp_attempts",columnDefinition="INT4 NOT NULL")
-    int otpAttempts;
+    private int otpAttempts;
     //	signUpOtp = 1,loginOtp = 2,updateProfileOtp=3
 
     @Column(name="service_type",columnDefinition=" INT4")
-    Integer serviceType;
+    private Integer serviceType;
 
     @Column(name="otp_sent_at")
-    LocalDateTime otpSentAt;
+    private LocalDateTime otpSentAt;
 
     @Column(name="otp_window_start_time")
-    LocalDateTime otpWindowStartTime;
+    private LocalDateTime otpWindowStartTime;
 
     //	 0=Unmatched, 1=Matched
     @Column(columnDefinition="INT4 NOT NULL ")
-    int status;
+    private int status;
 
     @Column(name="request", columnDefinition="text")
-    int request;
+    private int request;
 
     @Column(name="response", columnDefinition="text")
-    int response;
+    private int response;
 
     @ManyToOne
     @JoinColumn(name="phone_code_id")

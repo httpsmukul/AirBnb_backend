@@ -4,44 +4,42 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 @RestControllerAdvice
-public class ExceptionHandler {
+//@ControllerAdvice
+public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(value= MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request){
 
-        Map<String, String> resp = new HashMap<>();
+//    @org.springframework.web.bind.annotation.ExceptionHandler(value = {Exception.class})
+//    public ResponseEntity handleAnyException(Exception ex, WebRequest request){
+//        ErrorMessage errorMessage = new ErrorMessage(erroMessageDescription);
+//        errorMessage.setMessage("yes something went wrong");
+//        errorMessage.setLocalDateTime(LocalDateTime.now());
+//        return new ResponseEntity<>(errorMessage,new HttpHeaders(),HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
-        ex.getBindingResult().getAllErrors().forEach( (error)->{
 
-            String fieldName = ((FieldError) error).getField();
-            String message = error.getDefaultMessage();
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = ServiceException.class)
+    public ResponseEntity<Object> handleServiceException(ServiceException ex){
 
-            resp.put(fieldName, message);
+        String erroMessageDescription = ex.getMessage();
 
-        });
-        return new ResponseEntity<Map<String, String>>(resp,new HttpHeaders(),HttpStatus.BAD_REQUEST);
+        ErrorMessage errorMessage = new ErrorMessage(erroMessageDescription);
+
+        return new ResponseEntity<Object>(errorMessage,HttpStatus.INTERNAL_SERVER_ERROR);
+
 
     }
 
-//    @org.springframework.web.bind.annotation.ExceptionHandler(value = ServiceException.class)
-//    public ResponseEntity<Object> handleServiceException(ServiceException ex){
-//
-//
-//        String erroMessageDescription = ex.getMessage();
-//
-//        ErrorMessage errorMessage = new ErrorMessage(erroMessageDescription, ex.getIndexError());
-//
-//        return new ResponseEntity<Object>(errorMessage,new HttpHeaders(),ex.getStatus());
-//
-//    }
+
+
 
 }
+
+
