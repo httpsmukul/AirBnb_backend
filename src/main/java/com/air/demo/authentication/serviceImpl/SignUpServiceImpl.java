@@ -73,7 +73,7 @@ public class SignUpServiceImpl implements SignUpService {
 
         otpLog.setStatus(Integer.parseInt(environment.getProperty("active")));
 
-
+        System.out.println("checking");
         otpLogRepository.save(otpLog);
         ResponseDto responseDto = new ResponseDto();
 
