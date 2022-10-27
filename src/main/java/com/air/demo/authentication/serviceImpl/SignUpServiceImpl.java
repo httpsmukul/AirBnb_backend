@@ -13,31 +13,33 @@ import com.air.demo.utilityDto.responseDto.ResponseDto;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
+@Configuration
 public class SignUpServiceImpl implements SignUpService {
+
+    @Autowired
+    private Environment environment;
+
 
     @Autowired
     CommonUtils commonUtils;
 
     @Autowired
-    private Environment environment;
-
-    @Autowired
     OtpLogRepository otpLogRepository;
 
+
+
+
     @Override
+
     public ResponseDto sendOtp(SendOtpReqDto sendOtp) {
 
-        System.out.println("printing email");
-        System.out.println(environment.getProperty("email"));
-        System.out.println("yes next l;ine ");
         String otpViaValueType = null;
 
         OtpLog otpLog = new OtpLog();
@@ -50,24 +52,26 @@ public class SignUpServiceImpl implements SignUpService {
         if(commonUtils.isMobileNumber(sendOtp.getOtpViaValue())){
             otpViaValueType = "mobile";
             System.out.println(environment.getProperty("mobile"));
-            otpLog.setOtpVia(1);
+            otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile"))));
         }
 
-        if(sendOtp.getRoleId() == 4 || sendOtp.getRoleId() == 3){
+        if(sendOtp.getRoleId() == Integer.parseInt(environment.getProperty("host"))
+                || sendOtp.getRoleId() == Integer.parseInt(environment.getProperty("customer"))){
             otpLog.setRole(sendOtp.getRoleId());
         }else{
             throw new ServiceException("This Role dose not exits");
         }
-        int otp = commonUtils.getOtp();
+        String otp = commonUtils.getOtp();
 
         if(!Objects.isNull(otp)){
 
-            otpLog.setOtp("1234");
+            System.out.println("here i am printing otp");
+            System.out.println(commonUtils.getOtp());
+            otpLog.setOtp(otp);
+
         }
 
-//        otpLog.setStatus(Integer.parseInt(environment.getProperty("active")));
-
-        otpLog.setStatus(1);
+        otpLog.setStatus(Integer.parseInt(environment.getProperty("active")));
 
 
         otpLogRepository.save(otpLog);

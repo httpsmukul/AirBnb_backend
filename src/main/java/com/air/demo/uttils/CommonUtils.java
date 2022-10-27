@@ -2,6 +2,7 @@ package com.air.demo.uttils;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,13 +42,15 @@ public class CommonUtils {
         return (m.matches());
     }
 
-        public int getOtp() {
+        public String getOtp() {
             int min = 1;
             int max = 10000;
             //Generate random int value from 50 to 100
 //            System.out.println("Random value in int from "+min+" to "+max+ ":");
             //            System.out.println(random_int);
-            return (int)Math.floor(Math.random()*(max-min+1)+min);
+            Random random = new Random();
+
+            return String.format("%04d", random.nextInt(10000));
         }
 
 
