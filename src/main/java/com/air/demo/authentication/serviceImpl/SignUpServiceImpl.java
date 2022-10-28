@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -40,19 +41,32 @@ public class SignUpServiceImpl implements SignUpService {
 
     public ResponseDto sendOtp(SendOtpReqDto sendOtp) {
 
-        String otpViaValueType = null;
+        int otpViaValueType = 0;
+        if(commonUtils.isEmail(sendOtp.getOtpViaValue())) {
+            otpViaValueType = Integer.parseInt(environment.getProperty("email"));
+        }
+        if(commonUtils.isMobileNumber(sendOtp.getOtpViaValue())){
+            otpViaValueType = Integer.parseInt(environment.getProperty("mobile"));
+
+        }
+        if(otpViaValueType == 0){
+
+            throw new ServiceException("otpViaValue type doesn't defined");
+        }
+
+//        OtpLog existOtpLog = otpLogRepository.findByOtpViaValueAndOtpViaOrderByOtpSentAtAsc(sendOtp.getOtpViaValue(),otpViaValueType)
+
 
         OtpLog otpLog = new OtpLog();
 
-        if(commonUtils.isEmail(sendOtp.getOtpViaValue())){
-            otpViaValueType = "email";
-            otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("email"))));
+
+        if(otpViaValueType == (Integer.parseInt(environment.getProperty("email")))){
+            otpLog.setOtpVia(Integer.parseInt(environment.getProperty("email")));
             otpLog.setOtpViaValue(sendOtp.getOtpViaValue());
         }
-        if(commonUtils.isMobileNumber(sendOtp.getOtpViaValue())){
-            otpViaValueType = "mobile";
+        if(otpViaValueType == Integer.parseInt(environment.getProperty("mobile"))){
             System.out.println(environment.getProperty("mobile"));
-            otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile"))));
+            otpLog.setOtpVia(Integer.parseInt(environment.getProperty("mobile")));
         }
 
         if(sendOtp.getRoleId() == Integer.parseInt(environment.getProperty("host"))
@@ -65,9 +79,12 @@ public class SignUpServiceImpl implements SignUpService {
 
         if(!Objects.isNull(otp)){
 
+
+
             System.out.println("here i am printing otp");
             System.out.println(commonUtils.getOtp());
             otpLog.setOtp(otp);
+            otpLog.setOtpSentAt(LocalDateTime.now());
 
         }
 
