@@ -19,8 +19,6 @@ public class MasterCountry {
     @Column(name = "phone_code")
     private String phoneCode;
 
-    @Column(name = "country")
-    private String country;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

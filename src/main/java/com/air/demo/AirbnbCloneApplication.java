@@ -9,10 +9,6 @@ import org.springframework.core.env.Environment;
 public class AirbnbCloneApplication {
 
 
-
-
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(AirbnbCloneApplication.class, args);
 		System.out.println("hey its working ==>");

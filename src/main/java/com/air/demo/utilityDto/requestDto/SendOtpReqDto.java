@@ -7,7 +7,7 @@ public class SendOtpReqDto {
 
     private String otpViaValue;
 
-    private String phoneCodeId;
+    private Long phoneCodeId;
 
     private int roleId;
 
