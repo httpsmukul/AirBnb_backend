@@ -16,7 +16,12 @@ import com.air.demo.utilityDto.requestDto.SignUpReqDto;
 import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
 import com.air.demo.utilityDto.responseDto.ResponseDto;
 import com.air.demo.uttils.CommonUtils;
+import com.twilio.Twilio;
+
+import com.twilio.exception.ApiException;
+import com.twilio.http.TwilioRestClient;
 import net.bytebuddy.asm.Advice;
+
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import com.twilio.Twilio;
+import com.twilio.converter.Promoter;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+
+import java.net.URI;
+import java.math.BigDecimal;
+
 
 import static org.apache.logging.log4j.message.Message.*;
 
@@ -48,10 +62,18 @@ public class SignUpServiceImpl implements SignUpService {
     private OtpLogRepository otpLogRepository;
 
     @Autowired
+    private MessageService messageService;
+
+    @Autowired
     private MasterCountryRepository masterCountryRepository;
+
+
 
     @Override
     public ResponseDto sendOtp(SendOtpReqDto sendOtp) {
+
+
+//        messageService.sendMessage(sendOtp.getOtpViaValue());
 
         //local variable =====================================================>
         int otpViaValueType = 0;
@@ -59,11 +81,11 @@ public class SignUpServiceImpl implements SignUpService {
         // ====================================================================>
 
         if(commonUtils.isEmail(sendOtp.getOtpViaValue())) {
-            otpViaValueType = Integer.parseInt(environment.getProperty("email"));
+            otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("email")));
         }
         if(commonUtils.isMobileNumber(sendOtp.getOtpViaValue())){
-            otpViaValueType = Integer.parseInt(environment.getProperty("mobile"));
-
+            otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")));
+//        messageService.sendMessage(sendOtp.getOtpViaValue());
         }
         if(otpViaValueType == 0){
 
@@ -85,9 +107,6 @@ public class SignUpServiceImpl implements SignUpService {
             if(Objects.equals(existOtpLog.size(),Integer.parseInt(Objects.requireNonNull(environment.getProperty("otpAttemptsCount"))))){
                 throw new ServiceException("because of so many attempts wait for next 30 sec");
             }
-//            for(int i = 0; i<existOtpLog.size();i++){
-//                otpAttempts += existOtpLog.get(i).getOtpAttempts();
-//            }
             otpAttempts += existOtpLog.size();
         }
 
@@ -114,9 +133,6 @@ public class SignUpServiceImpl implements SignUpService {
 
         if(!Objects.isNull(otp)){
 
-
-
-            System.out.println("here i am printing otp");
             System.out.println(commonUtils.getOtp());
             otpLog.setOtp(otp);
             otpLog.setOtpSentAt(LocalDateTime.now());
