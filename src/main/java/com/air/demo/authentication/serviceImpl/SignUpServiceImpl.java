@@ -12,17 +12,16 @@ import com.air.demo.dto.authentication.user.OtpResponseDto;
 import com.air.demo.masterData.Repository.MasterCountryRepository;
 import com.air.demo.masterData.entites.MasterCountry;
 import com.air.demo.user.Entity.User;
+import com.air.demo.user.Entity.coustomer.Customer;
+import com.air.demo.user.Entity.host.Host;
+import com.air.demo.user.repository.CustomerRepository;
+import com.air.demo.user.repository.HostRepository;
+import com.air.demo.user.repository.UserRepository;
 import com.air.demo.utilityDto.requestDto.SendOtpReqDto;
 import com.air.demo.utilityDto.requestDto.SignUpReqDto;
 import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
 import com.air.demo.utilityDto.responseDto.ResponseDto;
 import com.air.demo.uttils.CommonUtils;
-import com.twilio.Twilio;
-
-import com.twilio.exception.ApiException;
-import com.twilio.http.TwilioRestClient;
-import io.swagger.models.auth.In;
-import net.bytebuddy.asm.Advice;
 
 
 import org.hibernate.service.spi.ServiceException;
@@ -37,17 +36,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import com.twilio.Twilio;
-import com.twilio.converter.Promoter;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
-
-import java.net.URI;
-import java.math.BigDecimal;
-
-
-import static org.apache.logging.log4j.message.Message.*;
 
 @Service
 @Configuration
@@ -68,6 +56,15 @@ public class SignUpServiceImpl implements SignUpService {
 
     @Autowired
     private MasterCountryRepository masterCountryRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private HostRepository hostRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
 
 
@@ -200,37 +197,59 @@ public class SignUpServiceImpl implements SignUpService {
     public ResponseDto userSignUp(SignUpReqDto signUpReq) {
 
         //for host
-        User user = new User();
 
-        user.setFirstName(signUpReq.getFirstName());
-        user.setLastName(signUpReq.getLastName());
-        user.setDob(signUpReq.getDob());
         List<OtpLog> otpLogsEmail = otpLogRepository.findByOtpViaValueAndStatusOrderByOtpSentAtDesc(signUpReq.getEmail(),
                 Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
 
         List<OtpLog> otpLogsPhone = otpLogRepository.findByOtpViaValueAndStatusOrderByOtpSentAtDesc(signUpReq.getPhoneNumber(),
                 Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
 
+        int roleEmail = otpLogsEmail.get(Integer.parseInt(Objects.requireNonNull(environment.getProperty("indexZero")))).getRole();
+        int rolePhone =  otpLogsPhone.get(Integer.parseInt(Objects.requireNonNull(environment.getProperty("indexZero")))).getRole();
         //check
-        if(this.checkingForHostCrud(otpLogsEmail.get(Integer.parseInt(Objects.requireNonNull(environment.getProperty("indexZero")))).getRole(),
-                otpLogsPhone.get(Integer.parseInt(Objects.requireNonNull(environment.getProperty("indexZero")))).getRole())){
-            System.out.println("yes its match ");
+        if(this.checkingForRole(roleEmail,rolePhone)){
+            System.out.println("yes its match");
+            System.out.println("yes role is matched do what you want to do");
+
+            User user = new User();
+            user.setFirstName(signUpReq.getFirstName());
+            user.setLastName(signUpReq.getLastName());
+            user.setDob(signUpReq.getDob());
+            user.setEmail(signUpReq.getEmail());
+            user.setPhoneNumber(signUpReq.getPhoneNumber());
+            user.setCreatedAt(LocalDateTime.now());
+            user.setIsEmailValidated(true);
+            user.setIsEmailValidated(true);
+            userRepository.save(user);
+
+            if(Objects.equals(roleEmail, Integer.parseInt(Objects.requireNonNull(environment.getProperty("host"))))){
+                Host host = new Host();
+                host.setStatus(Integer.parseInt(Objects.requireNonNull(environment.getProperty("inactive"))));
+                host.setUser(user);
+                host.setCreatedAt(LocalDateTime.now());
+                hostRepository.save(host);
+            } else if (Objects.equals(roleEmail, Integer.parseInt(Objects.requireNonNull(environment.getProperty("customer"))))) {
+                Customer customer = new Customer();
+                customer.setUser(user);
+                customer.setCreatedAt(LocalDateTime.now());
+                customer.setStatus(Integer.parseInt(Objects.requireNonNull(environment.getProperty("inactive"))));
+                customerRepository.save(customer);
+            }
+
+
         }else{
-            System.out.println("no its not match");
+            System.out.println("role doesn't match");
         }
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setData("Profile created successfully");
+        responseDto.setStatus(true);
+        responseDto.setMessage("SUCCESS");
 
-
-
-
-        return null;
+        return responseDto;
     }
 
-    private boolean checkingForHostCrud(int email, int phone){
-
-        return email == Integer.parseInt(Objects.requireNonNull(environment.getProperty("advisor"))) &&
-                phone == Integer.parseInt(Objects.requireNonNull(environment.getProperty("advisor")));
+    private boolean checkingForRole(int email, int phone){
+        return !Objects.equals(email, phone);
     }
-
-
 
 }
