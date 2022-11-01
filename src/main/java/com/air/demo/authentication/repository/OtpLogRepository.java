@@ -10,6 +10,8 @@ public interface OtpLogRepository extends JpaRepository<OtpLog,Long> {
     //String otpViaValue, int otpVia,
     List<OtpLog> findByOtpViaValueAndOtpViaAndOtpSentAtGreaterThanEqualAndOtpSentAtLessThanEqualOrderByOtpSentAtDesc(String otpViaValue, int otpVia,LocalDateTime to,LocalDateTime from);
 
+
+    List<OtpLog> findByOtpViaValueAndStatusOrderByOtpSentAtDesc(String otpViaValue, int status);
 //OtpViaValueAndOtpViaAnd
     //OrderByOtpSentAtDesc
 //findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(OffsetDateTime endDate, OffsetDateTime startDate);

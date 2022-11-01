@@ -1,7 +1,6 @@
 package com.air.demo.user.Entity;
 import com.air.demo.masterData.entites.MasterCountry;
 import lombok.Data;
-import org.springframework.cglib.core.Block;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

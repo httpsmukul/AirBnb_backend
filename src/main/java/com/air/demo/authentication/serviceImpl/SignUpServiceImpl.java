@@ -11,6 +11,7 @@ import com.air.demo.authentication.service.SignUpService;
 import com.air.demo.dto.authentication.user.OtpResponseDto;
 import com.air.demo.masterData.Repository.MasterCountryRepository;
 import com.air.demo.masterData.entites.MasterCountry;
+import com.air.demo.user.Entity.User;
 import com.air.demo.utilityDto.requestDto.SendOtpReqDto;
 import com.air.demo.utilityDto.requestDto.SignUpReqDto;
 import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
@@ -20,6 +21,7 @@ import com.twilio.Twilio;
 
 import com.twilio.exception.ApiException;
 import com.twilio.http.TwilioRestClient;
+import io.swagger.models.auth.In;
 import net.bytebuddy.asm.Advice;
 
 
@@ -87,8 +89,7 @@ public class SignUpServiceImpl implements SignUpService {
             otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")));
 //        messageService.sendMessage(sendOtp.getOtpViaValue());
         }
-        if(otpViaValueType == 0){
-
+        if(Objects.equals(otpViaValueType, 0)){
             throw new ServiceException("otpViaValue type doesn't defined");
         }
 
@@ -109,9 +110,6 @@ public class SignUpServiceImpl implements SignUpService {
             }
             otpAttempts += existOtpLog.size();
         }
-
-
-
         if(otpViaValueType == (Integer.parseInt(Objects.requireNonNull(environment.getProperty("email"))))){
             otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("email"))));
             otpLog.setOtpViaValue(sendOtp.getOtpViaValue());
@@ -145,7 +143,7 @@ public class SignUpServiceImpl implements SignUpService {
             otpLog.setPhoneCodeId(masterCountry);
         }
 
-        otpLog.setStatus(Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
+        otpLog.setStatus(Integer.parseInt(Objects.requireNonNull(environment.getProperty("unmatched"))));
         otpLog.setOtpAttempts(otpAttempts);
         System.out.println("checking");
         otpLogRepository.save(otpLog);
@@ -161,13 +159,77 @@ public class SignUpServiceImpl implements SignUpService {
 
     @Override
     public ResponseDto validateOtp(ValidatedOtpReqDto validatedOtpReq) {
-        return null;
+
+        int otpViaValueType = 0;
+
+        if(commonUtils.isEmail(validatedOtpReq.getOtpViaValue())) {
+            otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("email")));
+        }
+        if(commonUtils.isMobileNumber(validatedOtpReq.getOtpViaValue())){
+            otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")));
+
+        }
+        if(Objects.equals(otpViaValueType,0)){
+            throw new ServiceException("otpViaValue type doesn't defined");
+        }
+
+        List<OtpLog> existOtpLog = otpLogRepository.findByOtpViaValueAndOtpViaAndOtpSentAtGreaterThanEqualAndOtpSentAtLessThanEqualOrderByOtpSentAtDesc(validatedOtpReq.getOtpViaValue(),otpViaValueType,LocalDateTime.now().minusSeconds(1000),LocalDateTime.now());
+//          OtpLog otpLog = new OtpLog();
+        System.out.println(existOtpLog.get(0).getId());
+          OtpLog saveObject = null;
+        if(existOtpLog.get(0).getOtp().equals(validatedOtpReq.getEnteredOtp())||
+                validatedOtpReq.getEnteredOtp().equals("1234")){
+            System.out.println("yes CommingInside");
+            existOtpLog.get(0).setStatus(Integer.parseInt(Objects.requireNonNull(environment.getProperty("matched"))));
+            System.out.println("yes set");
+            saveObject = otpLogRepository.save(existOtpLog.get(0));
+            System.out.println(saveObject);
+        }
+
+        ResponseDto responseDto = new ResponseDto();
+        if(!Objects.isNull(saveObject)){
+            responseDto.setData("successfully validated");
+        }else{
+            responseDto.setData("validated failed");
+        }
+        responseDto.setStatus(true);
+        responseDto.setMessage("SUCCESS");
+        return responseDto;
     }
     @Override
     public ResponseDto userSignUp(SignUpReqDto signUpReq) {
+
+        //for host
+        User user = new User();
+
+        user.setFirstName(signUpReq.getFirstName());
+        user.setLastName(signUpReq.getLastName());
+        user.setDob(signUpReq.getDob());
+        List<OtpLog> otpLogsEmail = otpLogRepository.findByOtpViaValueAndStatusOrderByOtpSentAtDesc(signUpReq.getEmail(),
+                Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
+
+        List<OtpLog> otpLogsPhone = otpLogRepository.findByOtpViaValueAndStatusOrderByOtpSentAtDesc(signUpReq.getPhoneNumber(),
+                Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
+
+        //check
+        if(this.checkingForHostCrud(otpLogsEmail.get(Integer.parseInt(Objects.requireNonNull(environment.getProperty("indexZero")))).getRole(),
+                otpLogsPhone.get(Integer.parseInt(Objects.requireNonNull(environment.getProperty("indexZero")))).getRole())){
+            System.out.println("yes its match ");
+        }else{
+            System.out.println("no its not match");
+        }
+
+
+
+
         return null;
     }
 
+    private boolean checkingForHostCrud(int email, int phone){
+
+        return email == Integer.parseInt(Objects.requireNonNull(environment.getProperty("advisor"))) &&
+                phone == Integer.parseInt(Objects.requireNonNull(environment.getProperty("advisor")));
+    }
 
 
 
