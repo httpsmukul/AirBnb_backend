@@ -68,6 +68,8 @@ public class SignUpServiceImpl implements SignUpService {
 
 
 
+
+
     @Override
     public ResponseDto sendOtp(SendOtpReqDto sendOtp) {
 
@@ -195,14 +197,26 @@ public class SignUpServiceImpl implements SignUpService {
     }
     @Override
     public ResponseDto userSignUp(SignUpReqDto signUpReq) {
+        //for user already exist checking
+          boolean userExist = checkForExistUser(signUpReq.getEmail(),signUpReq.getPhoneNumber());
+
+          if(userExist){
+              throw new ServiceException("User already exist");
+          }
 
         //for host
-
+        System.out.println("coming request ++++++++++++++200");
         List<OtpLog> otpLogsEmail = otpLogRepository.findByOtpViaValueAndStatusOrderByOtpSentAtDesc(signUpReq.getEmail(),
                 Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
 
         List<OtpLog> otpLogsPhone = otpLogRepository.findByOtpViaValueAndStatusOrderByOtpSentAtDesc(signUpReq.getPhoneNumber(),
                 Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
+
+        System.out.println("email+++++++++++++++++++++");
+        System.out.println(otpLogsEmail);
+        System.out.println("phone+++++++++++++++++++");
+        System.out.println(otpLogsPhone);
+
 
         int roleEmail = otpLogsEmail.get(Integer.parseInt(Objects.requireNonNull(environment.getProperty("indexZero")))).getRole();
         int rolePhone =  otpLogsPhone.get(Integer.parseInt(Objects.requireNonNull(environment.getProperty("indexZero")))).getRole();
@@ -239,6 +253,7 @@ public class SignUpServiceImpl implements SignUpService {
 
         }else{
             System.out.println("role doesn't match");
+            throw new ServiceException("Role doesn't matched");
         }
         ResponseDto responseDto = new ResponseDto();
         responseDto.setData("Profile created successfully");
@@ -249,7 +264,21 @@ public class SignUpServiceImpl implements SignUpService {
     }
 
     private boolean checkingForRole(int email, int phone){
-        return !Objects.equals(email, phone);
+        System.out.println(email);
+        System.out.println(phone);
+        return Objects.equals(email, phone);
     }
 
+    private boolean checkForExistUser (String email,String phone){
+//        User user = userRepository.findByEmail(email);
+//        User user1 = userRepository.findByPhoneNumber(phone);
+        User user = userRepository.findByEmailOrPhoneNumber(email,phone);
+        System.out.println("checking271line+++++++++++++");
+//        System.out.println(user);
+        System.out.println("checking273line+++++++++++++");
+//        System.out.println(user1);
+        System.out.println("checking275line+++++++++++++");
+        System.out.println(user);
+        return !Objects.isNull(user);
+    }
 }
