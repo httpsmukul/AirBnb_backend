@@ -9,8 +9,8 @@ import javax.persistence.*;
 
 @Data
 @Entity
-
-public class Gust {
+@Table(name = "guest")
+public class Guest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

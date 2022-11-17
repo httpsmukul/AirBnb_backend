@@ -1,10 +1,9 @@
 package com.air.demo.booking.entites;
 
 import com.air.demo.hotels.entites.Hotels;
-import com.air.demo.masterData.entites.MasterCountry;
 import com.air.demo.user.Entity.User;
 import com.air.demo.user.Entity.coustomer.Customer;
-import com.air.demo.user.Entity.coustomer.Gust;
+import com.air.demo.user.Entity.coustomer.Guest;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -32,7 +31,7 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "gust_id")
-    private Gust gustProfileId;
+    private Guest gustProfileId;
 
 
 

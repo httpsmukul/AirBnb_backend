@@ -1,10 +1,5 @@
 package com.air.demo.authentication.serviceImpl;
 
-
-
-
-
-
 import com.air.demo.authentication.entites.OtpLog;
 import com.air.demo.authentication.repository.OtpLogRepository;
 import com.air.demo.authentication.service.SignUpService;
@@ -22,16 +17,11 @@ import com.air.demo.utilityDto.requestDto.SignUpReqDto;
 import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
 import com.air.demo.utilityDto.responseDto.ResponseDto;
 import com.air.demo.uttils.CommonUtils;
-
-
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -68,92 +58,109 @@ public class SignUpServiceImpl implements SignUpService {
 
 
 
+    private void validationForSendOtp(SendOtpReqDto sendOtp){
 
+    int otpViaValueType = 0;
+    if (commonUtils.isEmail(sendOtp.getOtpViaValue())) {
+        otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("email")));
+    }
+    if (commonUtils.isMobileNumber(sendOtp.getOtpViaValue())) {
+        otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")));
+    }
+    if (Objects.equals(otpViaValueType, 0)) {
+        throw new ServiceException("otpViaValue type doesn't defined");
+    }
+    //role
+    if(!Objects.equals(sendOtp.getRoleId(), Integer.parseInt(Objects.requireNonNull(environment.getProperty("host"))))
+            || !Objects.equals(sendOtp.getRoleId(),Integer.parseInt(Objects.requireNonNull(environment.getProperty("customer"))))){
+        throw new ServiceException("roleId is Invalid");
+    }
+
+}
 
     @Override
     public ResponseDto sendOtp(SendOtpReqDto sendOtp) {
 
+        //validation
+          this.validationForSendOtp(sendOtp);
 
-//        messageService.sendMessage(sendOtp.getOtpViaValue());
+              //local variable =====================================================>
+              int otpViaValueType = 0;
+              int otpAttempts = 1;
+              // ====================================================================>
 
-        //local variable =====================================================>
-        int otpViaValueType = 0;
-        int otpAttempts = 1;
-        // ====================================================================>
 
-        if(commonUtils.isEmail(sendOtp.getOtpViaValue())) {
+         if (commonUtils.isEmail(sendOtp.getOtpViaValue())) {
             otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("email")));
-        }
-        if(commonUtils.isMobileNumber(sendOtp.getOtpViaValue())){
+         }
+         if (commonUtils.isMobileNumber(sendOtp.getOtpViaValue())) {
             otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")));
-//        messageService.sendMessage(sendOtp.getOtpViaValue());
-        }
-        if(Objects.equals(otpViaValueType, 0)){
-            throw new ServiceException("otpViaValue type doesn't defined");
-        }
+         }
 
 
-        List<OtpLog> existOtpLog = otpLogRepository.findByOtpViaValueAndOtpViaAndOtpSentAtGreaterThanEqualAndOtpSentAtLessThanEqualOrderByOtpSentAtDesc(sendOtp.getOtpViaValue(),otpViaValueType,LocalDateTime.now().minusSeconds(30),LocalDateTime.now());
-        System.out.println(LocalDateTime.now());
-        System.out.println(LocalDateTime.now().minusSeconds(30));
-        System.out.println(LocalDateTime.now().plusSeconds(30));
-        System.out.println("yes here 60 " +existOtpLog.size());
-        System.out.println(existOtpLog.stream().map(OtpLog::getId).collect(Collectors.toList()));
-        System.out.println("yes here in 62");
-        OtpLog otpLog = new OtpLog();
 
-        if(!Objects.isNull(existOtpLog)){
 
-            if(Objects.equals(existOtpLog.size(),Integer.parseInt(Objects.requireNonNull(environment.getProperty("otpAttemptsCount"))))){
-                throw new ServiceException("because of so many attempts wait for next 30 sec");
-            }
-            otpAttempts += existOtpLog.size();
-        }
-        if(otpViaValueType == (Integer.parseInt(Objects.requireNonNull(environment.getProperty("email"))))){
-            otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("email"))));
-            otpLog.setOtpViaValue(sendOtp.getOtpViaValue());
-        }
-        if(otpViaValueType == Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")))){
-            System.out.println(environment.getProperty("mobile"));
-            otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile"))));
-            otpLog.setOtpViaValue(sendOtp.getOtpViaValue());
+              List<OtpLog> existOtpLog = otpLogRepository.findByOtpViaValueAndOtpViaAndOtpSentAtGreaterThanEqualAndOtpSentAtLessThanEqualOrderByOtpSentAtDesc(sendOtp.getOtpViaValue(), otpViaValueType, LocalDateTime.now().minusSeconds(30), LocalDateTime.now());
+              System.out.println(LocalDateTime.now());
+              System.out.println(LocalDateTime.now().minusSeconds(30));
+              System.out.println(LocalDateTime.now().plusSeconds(30));
+              System.out.println("yes here 60 " + existOtpLog.size());
+              System.out.println(existOtpLog.stream().map(OtpLog::getId).collect(Collectors.toList()));
+              System.out.println("yes here in 62");
+              OtpLog otpLog = new OtpLog();
 
-        }
+              if (!existOtpLog.isEmpty()) {
 
-        if(sendOtp.getRoleId() == Integer.parseInt(Objects.requireNonNull(environment.getProperty("host")))
-                || sendOtp.getRoleId() == Integer.parseInt(Objects.requireNonNull(environment.getProperty("customer")))){
-            otpLog.setRole(sendOtp.getRoleId());
-        }else{
-            throw new ServiceException("This Role dose not exits");
-        }
-        String otp = commonUtils.getOtp();
+                  if (Objects.equals(existOtpLog.size(), Integer.parseInt(Objects.requireNonNull(environment.getProperty("otpAttemptsCount"))))) {
+                      throw new ServiceException("because of so many attempts wait for next 30 sec");
+                  }
+                  otpAttempts += existOtpLog.size();
+              }
+              if (otpViaValueType == (Integer.parseInt(Objects.requireNonNull(environment.getProperty("email"))))) {
+                  otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("email"))));
+                  otpLog.setOtpViaValue(sendOtp.getOtpViaValue());
+              }
+              if (otpViaValueType == Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")))) {
+                  System.out.println(environment.getProperty("mobile"));
+                  otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile"))));
+                  otpLog.setOtpViaValue(sendOtp.getOtpViaValue());
 
-        if(!Objects.isNull(otp)){
+              }
 
-            System.out.println(commonUtils.getOtp());
-            otpLog.setOtp(otp);
-            otpLog.setOtpSentAt(LocalDateTime.now());
+              if (sendOtp.getRoleId() == Integer.parseInt(Objects.requireNonNull(environment.getProperty("host")))
+                      || sendOtp.getRoleId() == Integer.parseInt(Objects.requireNonNull(environment.getProperty("customer")))) {
+                  otpLog.setRole(sendOtp.getRoleId());
+              } else {
+                  throw new ServiceException("This Role dose not exits");
+              }
+              String otp = commonUtils.getOtp();
 
-        }
+              if (!Objects.isNull(otp)) {
 
-        //setting phoneCode
-        if(Objects.isNull(sendOtp.getPhoneCodeId())){
-            MasterCountry masterCountry  = masterCountryRepository.findByIdAndStatus(sendOtp.getPhoneCodeId(),Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
-            otpLog.setPhoneCodeId(masterCountry);
-        }
+                  System.out.println(commonUtils.getOtp());
+                  otpLog.setOtp(otp);
+                  otpLog.setOtpSentAt(LocalDateTime.now());
 
-        otpLog.setStatus(Integer.parseInt(Objects.requireNonNull(environment.getProperty("unmatched"))));
-        otpLog.setOtpAttempts(otpAttempts);
-        System.out.println("checking");
-        otpLogRepository.save(otpLog);
-        ResponseDto responseDto = new ResponseDto();
+              }
 
-        OtpResponseDto otpResponseDto = new OtpResponseDto();
-        otpResponseDto.setOtpAttempts(otpAttempts);
-        responseDto.setData(otpResponseDto);
-        responseDto.setStatus(true);
-        responseDto.setMessage("SUCCESS");
-        return responseDto;
+              //setting phoneCode
+              if (Objects.isNull(sendOtp.getPhoneCodeId())) {
+                  MasterCountry masterCountry = masterCountryRepository.findByIdAndStatus(sendOtp.getPhoneCodeId(), Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
+                  otpLog.setPhoneCodeId(masterCountry);
+              }
+
+              otpLog.setStatus(Integer.parseInt(Objects.requireNonNull(environment.getProperty("unmatched"))));
+              otpLog.setOtpAttempts(otpAttempts);
+              System.out.println("checking");
+              otpLogRepository.save(otpLog);
+              ResponseDto responseDto = new ResponseDto();
+
+              OtpResponseDto otpResponseDto = new OtpResponseDto();
+              otpResponseDto.setOtpAttempts(otpAttempts);
+              responseDto.setData(otpResponseDto);
+              responseDto.setStatus(true);
+              responseDto.setMessage("SUCCESS");
+              return responseDto;
     }
 
     @Override
@@ -190,6 +197,7 @@ public class SignUpServiceImpl implements SignUpService {
             responseDto.setData("successfully validated");
         }else{
             responseDto.setData("validated failed");
+            throw new ServiceException("otp is not valid");
         }
         responseDto.setStatus(true);
         responseDto.setMessage("SUCCESS");
@@ -205,16 +213,13 @@ public class SignUpServiceImpl implements SignUpService {
           }
 
         //for host
-        System.out.println("coming request ++++++++++++++200");
         List<OtpLog> otpLogsEmail = otpLogRepository.findByOtpViaValueAndStatusOrderByOtpSentAtDesc(signUpReq.getEmail(),
                 Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
 
         List<OtpLog> otpLogsPhone = otpLogRepository.findByOtpViaValueAndStatusOrderByOtpSentAtDesc(signUpReq.getPhoneNumber(),
                 Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
 
-        System.out.println("email+++++++++++++++++++++");
         System.out.println(otpLogsEmail);
-        System.out.println("phone+++++++++++++++++++");
         System.out.println(otpLogsPhone);
 
 
@@ -222,9 +227,6 @@ public class SignUpServiceImpl implements SignUpService {
         int rolePhone =  otpLogsPhone.get(Integer.parseInt(Objects.requireNonNull(environment.getProperty("indexZero")))).getRole();
         //check
         if(this.checkingForRole(roleEmail,rolePhone)){
-            System.out.println("yes its match");
-            System.out.println("yes role is matched do what you want to do");
-
             User user = new User();
             user.setFirstName(signUpReq.getFirstName());
             user.setLastName(signUpReq.getLastName());
@@ -250,7 +252,6 @@ public class SignUpServiceImpl implements SignUpService {
                 customerRepository.save(customer);
             }
 
-
         }else{
             System.out.println("role doesn't match");
             throw new ServiceException("Role doesn't matched");
@@ -259,26 +260,15 @@ public class SignUpServiceImpl implements SignUpService {
         responseDto.setData("Profile created successfully");
         responseDto.setStatus(true);
         responseDto.setMessage("SUCCESS");
-
         return responseDto;
     }
 
     private boolean checkingForRole(int email, int phone){
-        System.out.println(email);
-        System.out.println(phone);
         return Objects.equals(email, phone);
     }
 
     private boolean checkForExistUser (String email,String phone){
-//        User user = userRepository.findByEmail(email);
-//        User user1 = userRepository.findByPhoneNumber(phone);
         User user = userRepository.findByEmailOrPhoneNumber(email,phone);
-        System.out.println("checking271line+++++++++++++");
-//        System.out.println(user);
-        System.out.println("checking273line+++++++++++++");
-//        System.out.println(user1);
-        System.out.println("checking275line+++++++++++++");
-        System.out.println(user);
         return !Objects.isNull(user);
     }
 }
