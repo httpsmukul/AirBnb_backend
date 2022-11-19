@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper=false)
 @Entity
-@Table(name="user_login_token", indexes = {@Index(name = "token_user_id_status_index", columnList ="token,user_id,status"),
-        @Index(name = "refresh_token_user_id_status_index", columnList = "refresh_token,user_id,status")})
+@Table(name="user_login_token")
+//        indexes = {@Index(name = "token_user_id_status_index", columnList ="token,user_id,status"),
+//        @Index(name = "refresh_token_user_id_status_index", columnList = "refresh_token,user_id,status")})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
