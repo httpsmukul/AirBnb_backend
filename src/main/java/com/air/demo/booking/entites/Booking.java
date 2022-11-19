@@ -1,7 +1,7 @@
 package com.air.demo.booking.entites;
 
 import com.air.demo.hotels.entites.Hotels;
-import com.air.demo.user.Entity.User;
+import com.air.demo.user.Entity.user.User;
 import com.air.demo.user.Entity.coustomer.Customer;
 import com.air.demo.user.Entity.coustomer.Guest;
 import lombok.Data;

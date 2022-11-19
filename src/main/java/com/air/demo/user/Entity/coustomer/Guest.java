@@ -2,7 +2,7 @@ package com.air.demo.user.Entity.coustomer;
 
 import com.air.demo.masterData.entites.MasterCountry;
 import com.air.demo.masterData.entites.MasterRelation;
-import com.air.demo.user.Entity.User;
+import com.air.demo.user.Entity.user.User;
 import lombok.Data;
 
 import javax.persistence.*;

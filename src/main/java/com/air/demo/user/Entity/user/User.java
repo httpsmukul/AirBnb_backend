@@ -1,4 +1,4 @@
-package com.air.demo.user.Entity;
+package com.air.demo.user.Entity.user;
 import com.air.demo.masterData.entites.MasterCountry;
 import lombok.Data;
 

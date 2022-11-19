@@ -1,6 +1,6 @@
 package com.air.demo.user.Entity.host;
 
-import com.air.demo.user.Entity.User;
+import com.air.demo.user.Entity.user.User;
 import lombok.Data;
 
 import javax.persistence.*;

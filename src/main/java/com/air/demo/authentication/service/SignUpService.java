@@ -4,7 +4,7 @@ import com.air.demo.utilityDto.requestDto.SendOtpReqDto;
 import com.air.demo.utilityDto.requestDto.SignUpReqDto;
 import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
 import com.air.demo.utilityDto.responseDto.ResponseDto;
-import org.springframework.stereotype.Service;
+
 
 
 public interface SignUpService {

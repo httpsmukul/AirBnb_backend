@@ -6,7 +6,7 @@ import com.air.demo.authentication.service.SignUpService;
 import com.air.demo.dto.authentication.user.OtpResponseDto;
 import com.air.demo.masterData.Repository.MasterCountryRepository;
 import com.air.demo.masterData.entites.MasterCountry;
-import com.air.demo.user.Entity.User;
+import com.air.demo.user.Entity.user.User;
 import com.air.demo.user.Entity.coustomer.Customer;
 import com.air.demo.user.Entity.host.Host;
 import com.air.demo.user.repository.CustomerRepository;
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @Configuration
@@ -65,7 +64,7 @@ public class SignUpServiceImpl implements SignUpService {
         otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("email")));
     }
     if (commonUtils.isMobileNumber(sendOtp.getOtpViaValue())) {
-        otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")));
+        otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("phone")));
     }
     if (Objects.equals(otpViaValueType, 0)) {
         throw new ServiceException("otpViaValue type doesn't defined");
@@ -94,19 +93,14 @@ public class SignUpServiceImpl implements SignUpService {
             otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("email")));
          }
          if (commonUtils.isMobileNumber(sendOtp.getOtpViaValue())) {
-            otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")));
+            otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("phone")));
          }
 
 
 
 
               List<OtpLog> existOtpLog = otpLogRepository.findByOtpViaValueAndOtpViaAndOtpSentAtGreaterThanEqualAndOtpSentAtLessThanEqualOrderByOtpSentAtDesc(sendOtp.getOtpViaValue(), otpViaValueType, LocalDateTime.now().minusSeconds(30), LocalDateTime.now());
-              System.out.println(LocalDateTime.now());
-              System.out.println(LocalDateTime.now().minusSeconds(30));
-              System.out.println(LocalDateTime.now().plusSeconds(30));
-              System.out.println("yes here 60 " + existOtpLog.size());
-              System.out.println(existOtpLog.stream().map(OtpLog::getId).collect(Collectors.toList()));
-              System.out.println("yes here in 62");
+
               OtpLog otpLog = new OtpLog();
 
               if (!existOtpLog.isEmpty()) {
@@ -120,9 +114,9 @@ public class SignUpServiceImpl implements SignUpService {
                   otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("email"))));
                   otpLog.setOtpViaValue(sendOtp.getOtpViaValue());
               }
-              if (otpViaValueType == Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")))) {
-                  System.out.println(environment.getProperty("mobile"));
-                  otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile"))));
+              if (otpViaValueType == Integer.parseInt(Objects.requireNonNull(environment.getProperty("phone")))) {
+                  System.out.println(environment.getProperty("phone"));
+                  otpLog.setOtpVia(Integer.parseInt(Objects.requireNonNull(environment.getProperty("phone"))));
                   otpLog.setOtpViaValue(sendOtp.getOtpViaValue());
 
               }
@@ -172,7 +166,7 @@ public class SignUpServiceImpl implements SignUpService {
             otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("email")));
         }
         if(commonUtils.isMobileNumber(validatedOtpReq.getOtpViaValue())){
-            otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("mobile")));
+            otpViaValueType = Integer.parseInt(Objects.requireNonNull(environment.getProperty("phone")));
 
         }
         if(Objects.equals(otpViaValueType,0)){
