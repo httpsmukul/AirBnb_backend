@@ -9,9 +9,14 @@ import com.air.demo.user.repository.UserRepository;
 import com.air.demo.utilityDto.requestDto.SignInReqDto;
 import com.air.demo.utilityDto.responseDto.ResponseDto;
 import com.air.demo.uttils.CommonUtils;
+import com.air.demo.uttils.JwtUtil;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -27,6 +32,14 @@ public class SignInServiceImpl implements SignInService {
 
     @Autowired
     Environment environment;
+
+    @Autowired
+    private JwtUtil jwtTokenUtil;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtUserDetailsService userDetailsService;
 
     @Autowired
     AuthorizationRepository authorizationRepository;
@@ -64,32 +77,62 @@ public class SignInServiceImpl implements SignInService {
 
     @Override
     public ResponseDto logInUser(SignInReqDto signInReqDto) {
+        System.out.println("yes its reach 80");
 
-        logInValidation(signInReqDto);
+//        logInValidation(signInReqDto);
 
-        int typeOfUserName = userNameIdentifier(signInReqDto);
+//        int typeOfUserName = userNameIdentifier(signInReqDto);
 
-        User requestedUser  = null;
+        User requestedUser  = userRepository.findByUserName(signInReqDto.getUserName());
 
-        if(typeOfUserName == Integer.parseInt("email")){
-            requestedUser = userRepository.findByEmail(signInReqDto.getUserName());
+        System.out.println("line88");
+        System.out.println(requestedUser.getUserName());
+        System.out.println(requestedUser.getPassword());
+        if(Objects.isNull(requestedUser)){
+            throw new ServiceException("user not found");
         }
 
-        if(typeOfUserName == Integer.parseInt("phone")){
-            requestedUser = userRepository.findByEmail(signInReqDto.getUserName());
+//        if(typeOfUserName == Integer.parseInt("email")){
+//            requestedUser = userRepository.findByEmail(signInReqDto.getUserName());
+//        }
+//
+//        if(typeOfUserName == Integer.parseInt("phone")){
+//            requestedUser = userRepository.findByEmail(signInReqDto.getUserName());
+//        }
+
+
+
+//        if (Objects.requireNonNull(requestedUser).getPassword().equals(signInReqDto.getPassword())) {
+//
+//        }
+
+        try {
+            authenticationManager.authenticate(
+
+                    new UsernamePasswordAuthenticationToken(requestedUser.getUserName(), signInReqDto.getPassword())
+            );
+            System.out.println("Line110");
+
+        }
+        catch (BadCredentialsException e) {
+            throw new ServiceException("Incorrect username or password", e);
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("Incorrect username or password", e);
         }
 
+        System.out.println("line114");
+        final UserDetails userDetails = userDetailsService
+                .loadUserByUsername(signInReqDto.getUserName());
+        System.out.println("line117");
 
-        if (Objects.requireNonNull(requestedUser).getPassword().equals(signInReqDto.getPassword())) {
+        final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        }
-
-
-
-
-
-
-        return null;
+       ResponseDto responseDto = new ResponseDto();
+       responseDto.setData("Bearer "+jwt);
+       responseDto.setStatus(true);
+       responseDto.setMessage("SCUESS");
+        return responseDto;
     }
 
     @Override

@@ -29,8 +29,8 @@ public class User {
     @Column(name = "dob")
     private String dob;
 
-    @Column(name = "profile_id")
-    private Integer profileId;
+    @Column(name = "user_name")
+    private String userName;
 
     @Column(name = "email")
     private String email;

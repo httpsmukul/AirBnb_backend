@@ -11,8 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice
-//@ControllerAdvice
+//@RestControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
 

@@ -8,6 +8,7 @@ import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
 import com.air.demo.utilityDto.responseDto.ResponseDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,6 +40,12 @@ public class SignUpController {
     public ResponseDto validateOtp(@RequestBody ValidatedOtpReqDto validatedOtpReq){
 
         return signUpService.validateOtp(validatedOtpReq);
+    }
+
+    @GetMapping("/fun")
+    public String fun(@RequestHeader String authorization){
+
+        return "working";
     }
 
 }
