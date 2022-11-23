@@ -42,10 +42,5 @@ public class SignUpController {
         return signUpService.validateOtp(validatedOtpReq);
     }
 
-    @GetMapping("/fun")
-    public String fun(@RequestHeader String authorization){
-
-        return "working";
-    }
 
 }

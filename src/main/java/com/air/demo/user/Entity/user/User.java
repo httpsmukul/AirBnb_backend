@@ -59,9 +59,6 @@ public class User {
 
     @Column(name = "journey_status")
     private int journeyStatus;
-    //
-
-
 
     @ManyToOne
     @JoinColumn(name = "country_id")
@@ -74,9 +71,9 @@ public class User {
     @Column(name = "is_phone_validated")
     private Boolean isPhoneValidated;
 
-
-
-
+    @ManyToOne
+    @JoinColumn( name ="role_id")
+    private Role role;
 
 
 

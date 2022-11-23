@@ -1,5 +1,8 @@
 package com.air.demo.hotels.entites;
 
+import com.air.demo.masterData.entites.MasterArea;
+import com.air.demo.masterData.entites.MasterCity;
+import com.air.demo.masterData.entites.MasterCountry;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,18 +15,19 @@ public class HotelAddress {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "country")
-    private String country;
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private MasterCountry country;
 
-    @Column(name = "city")
-    private String city;
-    @OneToOne
-   @JoinColumn(name = "hotel_id")
-   private Hotels hotels;
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private MasterCity city;
 
+    @ManyToOne
+    @JoinColumn(name = "area_id")
+    private MasterArea area;
 
-
-
-
+    @Column(name = "land_mark")
+    private String landMark;
 
 }
