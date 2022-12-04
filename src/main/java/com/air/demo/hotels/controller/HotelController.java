@@ -1,7 +1,8 @@
 package com.air.demo.hotels.controller;
 
 
-import com.air.demo.hotels.dto.request.AddPropertyDto;
+import com.air.demo.dto.commonDto.IdDto;
+import com.air.demo.dto.request.AddPropertyDto;
 import com.air.demo.hotels.service.HotelService;
 import com.air.demo.utilityDto.responseDto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class HotelController {
     public ResponseDto addHotels(AddPropertyDto addPropertyDto){
 
         return hotelService.addHotels(addPropertyDto);
+    }
+
+    @PostMapping("/remove-property")
+    public ResponseDto removeProperty(IdDto idDto){
+
+        return hotelService.removeHotels(idDto);
     }
 
 

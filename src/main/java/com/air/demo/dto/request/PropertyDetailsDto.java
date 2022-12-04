@@ -1,4 +1,4 @@
-package com.air.demo.hotels.dto.request;
+package com.air.demo.dto.request;
 
 import lombok.Data;
 
@@ -6,9 +6,5 @@ import lombok.Data;
 public class PropertyDetailsDto {
 
     private int totalRooms;
-
-
-
-
 
 }

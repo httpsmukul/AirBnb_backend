@@ -20,6 +20,9 @@ public class MasterCity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "status")
+    private  int status;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

@@ -21,6 +21,8 @@ public class MasterArea {
     @JoinColumn(name = "country_id")
     private MasterCountry country;
 
+     @Column(name = "status")
+    private int status;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
