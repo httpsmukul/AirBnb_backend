@@ -1,4 +1,4 @@
-package com.air.demo.utilityDto.responseDto;
+package com.air.demo.common.utilityDto.responseDto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

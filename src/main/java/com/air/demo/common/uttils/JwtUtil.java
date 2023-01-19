@@ -1,4 +1,4 @@
-package com.air.demo.uttils;
+package com.air.demo.common.uttils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

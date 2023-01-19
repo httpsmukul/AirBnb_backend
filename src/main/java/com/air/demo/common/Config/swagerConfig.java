@@ -1,4 +1,4 @@
-package com.air.demo.Config;
+package com.air.demo.common.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

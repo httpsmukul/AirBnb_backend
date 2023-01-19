@@ -1,4 +1,4 @@
-package com.air.demo.utilityDto.requestDto;
+package com.air.demo.common.utilityDto.requestDto;
 
 import lombok.Data;
 

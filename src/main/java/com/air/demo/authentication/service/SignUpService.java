@@ -1,9 +1,9 @@
 package com.air.demo.authentication.service;
 
-import com.air.demo.utilityDto.requestDto.SendOtpReqDto;
-import com.air.demo.utilityDto.requestDto.SignUpReqDto;
-import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
-import com.air.demo.utilityDto.responseDto.ResponseDto;
+import com.air.demo.common.utilityDto.requestDto.SendOtpReqDto;
+import com.air.demo.common.utilityDto.requestDto.SignUpReqDto;
+import com.air.demo.common.utilityDto.requestDto.ValidatedOtpReqDto;
+import com.air.demo.common.utilityDto.responseDto.ResponseDto;
 
 
 

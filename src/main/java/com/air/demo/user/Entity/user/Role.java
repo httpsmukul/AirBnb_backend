@@ -1,23 +1,30 @@
 package com.air.demo.user.Entity.user;
 
-import lombok.Data;
-
-import javax.persistence.*;
+import lombok.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 
+
+
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Role implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name  = "title")
+    // 1=ROLE_ADMIN, 2=ROLE_SUBADMIN, 3=ROLE_ADVISOR, 4=ROLE_CLIENT
+    @Column(name="role_title",nullable = false,columnDefinition = "VARCHAR(255)")
     private String title;
 
-    @Column(name = "status")
+    //1= active, 0 = inactive
+    @Column(name="role_status", columnDefinition = " int4 NOT NULL default '1'")
     private int status;
+
 
 }

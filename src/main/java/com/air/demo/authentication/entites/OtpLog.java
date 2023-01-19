@@ -1,9 +1,8 @@
 package com.air.demo.authentication.entites;
 
-import com.air.demo.masterData.entites.MasterCountry;
+import com.air.demo.masterData.entity.MasterCountry;
 import lombok.Data;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 

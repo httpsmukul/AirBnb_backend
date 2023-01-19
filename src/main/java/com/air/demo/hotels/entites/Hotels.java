@@ -25,6 +25,9 @@ public class Hotels {
     @Column(name = "hotel_name")
     private String hotelName;
 
+    @Column(name = "address")
+    private String address;
+
     @OneToOne
     @JoinColumn(name = "hotel_address")
     private HotelAddress hotelAddress;

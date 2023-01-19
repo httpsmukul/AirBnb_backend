@@ -1,8 +1,8 @@
 package com.air.demo.hotels.entites;
 
-import com.air.demo.masterData.entites.MasterArea;
-import com.air.demo.masterData.entites.MasterCity;
-import com.air.demo.masterData.entites.MasterCountry;
+import com.air.demo.masterData.entity.MasterArea;
+import com.air.demo.masterData.entity.MasterCity;
+import com.air.demo.masterData.entity.MasterCountry;
 import lombok.Data;
 
 import javax.persistence.*;

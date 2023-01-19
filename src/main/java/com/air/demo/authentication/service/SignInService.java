@@ -1,7 +1,7 @@
 package com.air.demo.authentication.service;
 
-import com.air.demo.utilityDto.requestDto.SignInReqDto;
-import com.air.demo.utilityDto.responseDto.ResponseDto;
+import com.air.demo.common.utilityDto.requestDto.SignInReqDto;
+import com.air.demo.common.utilityDto.responseDto.ResponseDto;
 
 public interface SignInService {
 

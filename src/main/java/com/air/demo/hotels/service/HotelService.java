@@ -2,7 +2,7 @@ package com.air.demo.hotels.service;
 
 import com.air.demo.dto.commonDto.IdDto;
 import com.air.demo.dto.request.AddPropertyDto;
-import com.air.demo.utilityDto.responseDto.ResponseDto;
+import com.air.demo.common.utilityDto.responseDto.ResponseDto;
 
 public interface HotelService {
 

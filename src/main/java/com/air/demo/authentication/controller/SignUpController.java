@@ -2,13 +2,12 @@ package com.air.demo.authentication.controller;
 
 
 import com.air.demo.authentication.service.SignUpService;
-import com.air.demo.utilityDto.requestDto.SendOtpReqDto;
-import com.air.demo.utilityDto.requestDto.SignUpReqDto;
-import com.air.demo.utilityDto.requestDto.ValidatedOtpReqDto;
-import com.air.demo.utilityDto.responseDto.ResponseDto;
+import com.air.demo.common.utilityDto.requestDto.SendOtpReqDto;
+import com.air.demo.common.utilityDto.requestDto.SignUpReqDto;
+import com.air.demo.common.utilityDto.requestDto.ValidatedOtpReqDto;
+import com.air.demo.common.utilityDto.responseDto.ResponseDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

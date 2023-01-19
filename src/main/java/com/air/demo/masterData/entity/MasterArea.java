@@ -1,4 +1,4 @@
-package com.air.demo.masterData.entites;
+package com.air.demo.masterData.entity;
 
 import lombok.Data;
 

@@ -2,9 +2,8 @@ package com.air.demo.authentication.controller;
 
 
 import com.air.demo.authentication.service.SignInService;
-import com.air.demo.utilityDto.requestDto.SendOtpReqDto;
-import com.air.demo.utilityDto.requestDto.SignInReqDto;
-import com.air.demo.utilityDto.responseDto.ResponseDto;
+import com.air.demo.common.utilityDto.requestDto.SignInReqDto;
+import com.air.demo.common.utilityDto.responseDto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

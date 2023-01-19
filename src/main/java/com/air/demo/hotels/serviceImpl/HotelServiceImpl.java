@@ -14,18 +14,19 @@ import com.air.demo.hotels.service.HotelService;
 import com.air.demo.masterData.Repository.MasterAreaRepository;
 import com.air.demo.masterData.Repository.MasterCityRepository;
 import com.air.demo.masterData.Repository.MasterCountryRepository;
-import com.air.demo.masterData.entites.MasterArea;
-import com.air.demo.masterData.entites.MasterCity;
-import com.air.demo.masterData.entites.MasterCountry;
+import com.air.demo.masterData.entity.MasterArea;
+import com.air.demo.masterData.entity.MasterCity;
+import com.air.demo.masterData.entity.MasterCountry;
 import com.air.demo.user.Entity.host.Host;
 import com.air.demo.user.repository.HostRepository;
-import com.air.demo.utilityDto.responseDto.ResponseDto;
+import com.air.demo.common.utilityDto.responseDto.ResponseDto;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class HotelServiceImpl implements HotelService {
@@ -71,7 +72,7 @@ public class HotelServiceImpl implements HotelService {
         }else{
             throw new ServiceException("host not found");
         }
-        UUID uuid=UUID.randomUUID();
+        UUID uuid= UUID.randomUUID();
         hotels.setHotelRegistration(Integer.parseInt(uuid.toString()));
         saveHotelImage(propertyDto.getPropertyImageDto(),hotels);
 
@@ -131,20 +132,26 @@ public class HotelServiceImpl implements HotelService {
         return hotelAddressRepository.save(hotelAddress);
     }
 
-    private HotelImages saveHotelImage(List<PropertyImageDto> propertyImage, Hotels hotels){
+    private void saveHotelImage(List<PropertyImageDto> propertyImage, Hotels hotels){
 
-        List<HotelImages> listOfHotelImage = new ArrayList<>();
-        for (PropertyImageDto propertyImageDto : propertyImage) {
+//        List<HotelImages> listOfHotelImage = new ArrayList<>();
+//        for (PropertyImageDto propertyImageDto : propertyImage) {
+//
+//            hotelImages.setHotels(hotels);
+//            hotelImages.setImage(propertyImageDto.getImage());
+//            hotelImages.setStatus(Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
+//            listOfHotelImage.add(hotelImages);
+//        }
+
+        List<HotelImages> listOfHotelImages =   propertyImage.stream().map(e->{
             HotelImages hotelImages = new HotelImages();
-            hotelImages.setHotels(hotels);
-            hotelImages.setImage(propertyImageDto.getImage());
+            hotelImages.setImage(e.getImage());
             hotelImages.setStatus(Integer.parseInt(Objects.requireNonNull(environment.getProperty("active"))));
-            listOfHotelImage.add(hotelImages);
-        }
-        hotelImageRepository.saveAll(listOfHotelImage);
+            hotelImages.setHotels(hotels);
+            return hotelImages;
+        }).collect(Collectors.toList());
 
-
-        return null;
+        hotelImageRepository.saveAll(listOfHotelImages);
     }
 
 

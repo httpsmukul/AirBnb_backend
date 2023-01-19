@@ -1,5 +1,5 @@
 package com.air.demo.user.Entity.user;
-import com.air.demo.masterData.entites.MasterCountry;
+import com.air.demo.masterData.entity.MasterCountry;
 import lombok.Data;
 
 import javax.persistence.*;

@@ -1,7 +1,7 @@
 package com.air.demo.authentication.filters;
 
 import com.air.demo.authentication.serviceImpl.JwtUserDetailsService;
-import com.air.demo.uttils.JwtUtil;
+import com.air.demo.common.uttils.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,4 +1,4 @@
-package com.air.demo.Config;
+package com.air.demo.common.Config;
 
 import com.air.demo.authentication.filters.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/swagger*/**", "/user/login", "/v2/api-docs", "/configuration/**", "/webjars/**", "/user/forgotpassword", "/user/registeringCustomerEmail", "/user/signup/registering/user", "/user/send/otp", "/user/sendotp", "/**/sendotp", "/user/validateotp", "/user/validate/otp", "/**/signup/**", "/demo/**", "/user/countrycode/getall/countrycodes", "/user/webinar/getall", "/user/blog/get/allblogs", "/user/aes/decrypt", "/user/aes/encrypt", "/user/getAllBanner", "/user/getAllPartners", "/user/getAllProducts", "/user/blog/getablog", "/generateTokenForVideoSdk", "/generateroom", "/user/forgot/**", "/user/get/dashboard/advisor/list", "/user/get/webinar/list/byyear", "/user/blog/get/allblogs/productid", "/user/page-management/**")
+                .antMatchers("/swagger*/**", "/user/login", "/hotels/searchHotels","/v2/api-docs", "/configuration/**", "/webjars/**", "/user/forgotpassword", "/user/registeringCustomerEmail", "/user/signup/registering/user", "/user/send/otp", "/user/sendotp", "/**/sendotp", "/user/validateotp", "/user/validate/otp", "/**/signup/**", "/demo/**", "/user/countrycode/getall/countrycodes", "/user/webinar/getall", "/user/blog/get/allblogs", "/user/aes/decrypt", "/user/aes/encrypt", "/user/getAllBanner", "/user/getAllPartners", "/user/getAllProducts", "/user/blog/getablog", "/generateTokenForVideoSdk", "/generateroom", "/user/forgot/**", "/user/get/dashboard/advisor/list", "/user/get/webinar/list/byyear", "/user/blog/get/allblogs/productid", "/user/page-management/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

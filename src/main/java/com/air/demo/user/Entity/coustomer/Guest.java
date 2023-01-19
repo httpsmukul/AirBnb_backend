@@ -1,7 +1,7 @@
 package com.air.demo.user.Entity.coustomer;
 
-import com.air.demo.masterData.entites.MasterCountry;
-import com.air.demo.masterData.entites.MasterRelation;
+import com.air.demo.masterData.entity.MasterCountry;
+import com.air.demo.masterData.entity.MasterRelation;
 import com.air.demo.user.Entity.user.User;
 import lombok.Data;
 
