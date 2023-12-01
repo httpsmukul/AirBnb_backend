@@ -28,7 +28,7 @@ public class InsertTableBean {
 
 
 
-    @Bean
+//    @Bean
     public void saveRole() {
         if (roleRepository.findAll().isEmpty()) {
             List<Role> roleList = new ArrayList<>();

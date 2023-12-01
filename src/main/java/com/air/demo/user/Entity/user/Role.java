@@ -1,9 +1,8 @@
 package com.air.demo.user.Entity.user;
 
 import lombok.*;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 
@@ -14,8 +13,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 public class Role implements Serializable {
+
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     // 1=ROLE_ADMIN, 2=ROLE_SUBADMIN, 3=ROLE_ADVISOR, 4=ROLE_CLIENT

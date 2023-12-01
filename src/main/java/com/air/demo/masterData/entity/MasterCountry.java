@@ -8,8 +8,10 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 public class MasterCountry {
+
     @Id
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name="country_code", columnDefinition = " VARCHAR(255) ")
